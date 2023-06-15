@@ -10,14 +10,27 @@ const Items = () => {
   const [width, setWidth] = useState<number>(window.innerWidth);
 
   const data1 = data.filter((el) => {
-    const guest = Number(search.guests.toString().split(" ")[0]);
+
+    let guest =0;
+
+    if(search.guests.toString() === 'Add guests'){
+      guest=0;
+    }else{
+      guest = Number(search.guests.toString().split(" ")[0]);
+    }
+
+    if(search.location==='Add location'){
+  
+      return el.maxGuests>= guest;
+    }
+  
     return (
       el.city === search.location.split(", ")[0] &&
       el.country === search.location.split(", ")[1] &&
       el.maxGuests >= guest
     );
   });
-
+// console.log(data1)
   const data11 = [];
   const data12 = [];
   const data13 = [];

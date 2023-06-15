@@ -12,13 +12,13 @@ const SearchState = (props: Props) => {
   };
 
   const [search, setSearch] = useState<searchProps>({
-    location: "Helsinki, Finland",
-    guests: "0 guests",
+    location: "Add location",
+    guests: "Add guests",
   });
 
   const handleSearch = ({
-    location = "Helsinki, Finland",
-    guests = "0 guests",
+    location = "Add location",
+    guests = "Add guests",
   }: searchProps) => {
     setSearch({
       location,

@@ -16,8 +16,8 @@ const AdvanceSearch = () => {
 
   const ref = useRef<HTMLDivElement>(null);
   const [places, setPlaces] = useState<inputProps>({
-    location: "Helsinki, Finland",
-    guests: "0 guests",
+    location: "Add location",
+    guests: "Add guests",
   });
   const [turn, setTurn] = useState<boolean>(false);
 
@@ -48,7 +48,13 @@ const AdvanceSearch = () => {
   const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
     const target = e.target;
     // console.log(target.type);
-    const value = Number(target.value.split(" ")[0]).toString();
+    let value = "";
+    if (target.value === "Add guests") {
+      value = "0";
+    } else {
+      value = Number(target.value.split(" ")[0]).toString();
+    }
+
     setPlaces((pre) => {
       return {
         ...pre,
@@ -60,12 +66,16 @@ const AdvanceSearch = () => {
   };
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
     const target = e.target;
-    const value = target.value ? Number(target.value) : undefined;
+    const value = target.value
+      ? target.value !== "Add guests"
+        ? Number(target.value)
+        : 0
+      : undefined;
     //  console.log('blur ' , value)
     target.type = "text";
     let temp = "";
     if (!value) {
-      temp = "0 guests";
+      temp = "Add guests";
     } else if (value === 1) {
       temp = target.value + " guest";
     } else {
@@ -77,6 +87,10 @@ const AdvanceSearch = () => {
         guests: temp,
       };
     });
+    if (counter1 + counter2 !== value) {
+      setCounter1(0);
+      setCounter2(0);
+    }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -97,17 +111,17 @@ const AdvanceSearch = () => {
   };
 
   const handleButtonClick = () => {
-    const temp = Number(places.guests.toString().split(" ")[0]);
+    const temp = places.guests.toString();
     handleSearch({
       location: places.location,
-      guests: temp === 0 ? temp + " guest" : temp + " guests",
+      guests: temp,
     });
 
     handleCloseClick();
     setTimeout(() => {
       setPlaces({
-        location: "Helsinki, Finland",
-        guests: "0 guests",
+        location: "Add location",
+        guests: "Add guests",
       });
       setCounter1(0);
       setCounter2(0);
@@ -132,9 +146,9 @@ const AdvanceSearch = () => {
             </span>
           </div>
 
-          <div className="flex flex-col big:grid big:grid-cols-2 big:gap-x-4 divide-y divide-[#f2f2f2] shadow-md justify-center rounded-2xl space-y-1">
+          <div className="flex flex-col big:grid big:grid-cols-2 big:gap-x-4 divide-y divide-[#f2f2f2] shadow-md big:shadow-none justify-center rounded-2xl space-y-1">
             <div
-              className="p-3 pl-5 pr-5  rounded-2xl border border-transparent space-y-1 hover:border-black cursor-pointer active:border-black transition-colors duration-500 ease-in-out"
+              className="p-3 pl-5 pr-5  rounded-2xl border border-transparent space-y-1 hover:border-black cursor-pointer active:border-black transition-colors duration-500 ease-in-out big:shadow-md"
               onClick={() => setTurn(false)}
             >
               <p className="text-[10px] font-extrabold">Location</p>
@@ -142,7 +156,7 @@ const AdvanceSearch = () => {
             </div>
             <div>
               <div
-                className="p-3 pl-5 pr-5 space-y-1 border border-transparent hover:border-black rounded-2xl cursor-pointer focus:border-black transition-colors duration-500 ease-in-out"
+                className="p-3 pl-5 pr-5 space-y-1 border border-transparent hover:border-black rounded-2xl cursor-pointer transition-colors duration-500 ease-in-out big:shadow-md"
                 onClick={() => setTurn(true)}
               >
                 <p className="text-[10px] font-extrabold">Guest</p>
@@ -194,6 +208,33 @@ const AdvanceSearch = () => {
                       <button
                         className="rounded-lg border cursor-pointer border-[#828282] p-1 pl-3 pr-3"
                         onClick={() => {
+                          const check =
+                            (counter1 === 0 ? counter1 : counter1 - 1) +
+                            counter2;
+
+                          if (check === 0) {
+                            setPlaces((pre) => {
+                              return {
+                                ...pre,
+                                guests: "Add guests",
+                              };
+                            });
+                          } else if (check === 1) {
+                            setPlaces((pre) => {
+                              return {
+                                ...pre,
+                                guests: check + " guest",
+                              };
+                            });
+                          } else {
+                            setPlaces((pre) => {
+                              return {
+                                ...pre,
+                                guests: check + " guests",
+                              };
+                            });
+                          }
+
                           setCounter1((pre) => {
                             if (pre === 0) {
                               return 0;
@@ -208,15 +249,36 @@ const AdvanceSearch = () => {
                       <span className="text-lg  font-bold">{counter1}</span>
                       <button
                         className="rounded-lg border cursor-pointer border-[#828282] p-1 pl-3 pr-3"
-                        onClick={() =>
-                          setCounter1((pre) => {
-                            if (pre >= 10) {
-                              return 10;
+                        onClick={() => {
+                          const check = counter1 + counter2 + 1;
+                          if (check < 10) {
+                            if (check === 1) {
+                              setPlaces((pre) => {
+                                return {
+                                  ...pre,
+                                  guests: check + " guest",
+                                };
+                              });
                             } else {
-                              return pre + 1;
+                              setPlaces((pre) => {
+                                return {
+                                  ...pre,
+                                  guests: check + " guests",
+                                };
+                              });
                             }
-                          })
-                        }
+
+                            setCounter1((pre) => {
+                              if (pre >= 10) {
+                                return 10;
+                              } else {
+                                return pre + 1;
+                              }
+                            });
+                          } else {
+                            alert("Max capacity reached");
+                          }
+                        }}
                       >
                         +
                       </button>
@@ -237,6 +299,33 @@ const AdvanceSearch = () => {
                       <button
                         className="rounded-lg border cursor-pointer border-[#828282] p-1 pl-3 pr-3"
                         onClick={() => {
+                          const check =
+                            (counter2 === 0 ? counter2 : counter2 - 1) +
+                            counter1;
+
+                          if (check === 0) {
+                            setPlaces((pre) => {
+                              return {
+                                ...pre,
+                                guests: "Add guests",
+                              };
+                            });
+                          } else if (check === 1) {
+                            setPlaces((pre) => {
+                              return {
+                                ...pre,
+                                guests: check + " guest",
+                              };
+                            });
+                          } else {
+                            setPlaces((pre) => {
+                              return {
+                                ...pre,
+                                guests: check + " guests",
+                              };
+                            });
+                          }
+
                           setCounter2((pre) => {
                             if (pre === 0) {
                               return 0;
@@ -251,15 +340,36 @@ const AdvanceSearch = () => {
                       <span className="text-lg  font-bold">{counter2}</span>
                       <button
                         className="rounded-lg border cursor-pointer border-[#828282] p-1 pl-3 pr-3"
-                        onClick={() =>
-                          setCounter2((pre) => {
-                            if (pre >= 10) {
-                              return 10;
+                        onClick={() => {
+                          const check = counter1 + counter2 + 1;
+                          if (check < 10) {
+                            if (check === 1) {
+                              setPlaces((pre) => {
+                                return {
+                                  ...pre,
+                                  guests: check + " guest",
+                                };
+                              });
                             } else {
-                              return pre + 1;
+                              setPlaces((pre) => {
+                                return {
+                                  ...pre,
+                                  guests: check + " guests",
+                                };
+                              });
                             }
-                          })
-                        }
+
+                            setCounter2((pre) => {
+                              if (pre >= 10) {
+                                return 10;
+                              } else {
+                                return pre + 1;
+                              }
+                            });
+                          } else {
+                            alert("Max capacity reached");
+                          }
+                        }}
                       >
                         +
                       </button>

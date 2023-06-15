@@ -20,20 +20,27 @@ const Search = () => {
   };
   const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
     const target = e.target;
-    target.value = target.value.split(" ")[0];
+    // target.value = target.value.split(" ")[0];
     //  console.log(target.value);
     target.type = "number";
   };
   const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
     const target = e.target;
-    const value = Number(target.value);
+    const value =target.value !== 'Add guests' ? Number(target.value) : 0;
     // console.log('blur ' ,target.value)
     target.type = "text";
     let temp = "";
-    if (value === 1) {
+    if(value ===0){
+      temp = 'Add guests'
+      !target.classList.contains('text-[#bdbdbd]') && target.classList.add('text-[#bdbdbd]');
+    }else if (value === 1) {
       temp = target.value + " guest";
+      target.classList.contains('text-[#bdbdbd]') && target.classList.remove('text-[#bdbdbd]');
+      !target.classList.contains('text-[#333333]') &&target.classList.add('text-[#333333]');
     } else {
       temp = target.value + " guests";
+      target.classList.contains('text-[#bdbdbd]') && target.classList.remove('text-[#bdbdbd]');
+      !target.classList.contains('text-[#333333]') &&target.classList.add('text-[#333333]');
     }
     handleSearch({ location: search.location, guests: temp });
   };
@@ -41,13 +48,13 @@ const Search = () => {
     <div className="font-mulish flex justify-center items-center">
       <div className="rounded-2xl w-72 h-14 grid grid-cols-6 divide-x shadow-md">
         <div className="flex justify-center items-center col-span-3 divide-[#f2f2f2]/50">
-          <span className="font-normal text-sm text-[#333333]">
+          <span className=" text-sm text-[#333333] font-semibold">
             {search.location}
           </span>
         </div>
         <div className="col-span-2 flex justify-center items-center">
           <input
-            className="appearance-none w-20 hover:outline-none outline-none text-sm text-[#bdbdbd] focus:text-[#333333]"
+            className="appearance-none font-semibold w-20 hover:outline-none outline-none text-sm text-[#bdbdbd] focus:text-[#333333]"
             value={search.guests}
             onChange={handleChange}
             type="text"
