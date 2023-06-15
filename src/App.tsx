@@ -31,7 +31,7 @@ function App() {
     
    <div ref={ref} className='w-[23.5rem] smini:w-[100dvw] h-[75rem] smini:h-[100dvh] bg-slate-50/80 fixed top-0 z-10 hidden opacity-0 transition-opacity duration-[2000ms] ease-in-out'></div>
 
-     <div className='micro:flex justify-center mini:w-[100dvw]'>
+     <div className='micro:flex flex-col justify-center mini:w-[100dvw]'>
      <div className='p-3 md:p-5 big:p-12 pt-7 space-y-10 big:space-y-20'>
 
       <div className='space-y-10 big:space-y-0 big:flex justify-between items-center'>
@@ -45,6 +45,9 @@ function App() {
     </div>
    
     </div>
+    <footer className='text-sm font-semibold font-montserrat text-center text-[#828282]'>
+      Don't copy built yours!!
+    </footer>
     </div>
     </>
   )
