@@ -12,7 +12,7 @@ const ListItem = (props: Props) => {
 
   return (
     <div className="space-y-3 pt-3 pb-3">
-      <div className="w-[22rem] mini:w-[23rem] esm:w-[24.3rem] md:w-[22rem] super:w-[25rem] xl:w-[23.5rem] rounded-2xl overflow-hidden cursor-pointer">
+      <div className="w-[22rem] mini:w-[23rem] esm:w-[24.3rem] vsm:w-[26rem] md:w-[22rem] super:w-[25rem] xl:w-[23.5rem] rounded-2xl overflow-hidden cursor-pointer 2xl:w-[29rem]">
         <img
           src={photo}
           alt=""
